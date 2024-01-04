@@ -1,44 +1,51 @@
 #!/bin/bash
 #
 #
-#Author: Author https://www.linkedin.com/in/juan-carlos-morla-reyes-6410a91b3
-#   
-#   [ Juan Carlos Morla Reyes ]
+##Author: 
 #
-#Linkedin 
-#   
-#   [ https://www.linkedin.com/in/juan-carlos-morla-reyes-6410a91b3 ]
+#		[ KalleyBacker ]
+#  
 #
-#VERSION 
+##Linkedin 
+#   
+#   	[ https://www.linkedin.com/in/juan-carlos-morla-reyes-6410a91b3 ]
+#
+##Instagram
+#
+#		[ https://www.instagram.com/linux_debugging ]
+#
+##VERSION 
 #      
-#		1.3 
+#		[ 1.3 ] 
 #
 #
-#NAME 
+##NAME 
 #       path_save.sh  
 #
-#SYNOPSIS
+##SYNOPSIS
 #		   
 #		pmng {argumento} {parametro}
 #
 #
-#DESCRIPTION
+##DESCRIPTION
 #
-#			Administrador de rutas concurrentes
-#			p=path mng=manager
+#		Administrador de rutas concurrentes
+#		p=path mng=manager
 #		 	  
 #								
-#BUGS 
+##BUGS 
 #
-#Cuando se intente buscar una ruta con un ID que no exista tiene que dar error
+#		Cuando se intente buscar una ruta con un ID que no exista tiene que dar error
 #
-#Listar una ruta esta solo debe recibir parámetros numéricos
+#		Listar una ruta esta solo debe recibir parámetros numéricos
 #		
-#Agregar más funciones para reemplazar el código repetido y mal escrito 
+#		Agregar más funciones para reemplazar el código repetido y mal escrito 
 #
-#Guardar rutas sin tener que estar ubicado en el path(agregar lectura de parámetros para la función save)
+#		Guardar rutas sin tener que estar ubicado en el path(agregar lectura de parámetros para la función save)
 #
 ##################################################################################################
+
+
 
 function debug {
 	set +x
@@ -52,13 +59,49 @@ function debug {
 }
 
 
+function Acierto_Error {
+  
+   	local pregunta=$1
+   	local parametro=$2
+    
+    if [[ ${pregunta} = Error ]];then
+    	local signo='❌' && local color=${red}
+    elif [[ ${pregunta} = Acierto ]]; then
+    	local signo='✅'&& local color=${verd}
+    fi 
+
+    echo -e "${white}[${null}${signo}${white}] ${pregunta} - ${null}$(echo -n "$2" |\
+        sed -e "s/\[/\\${null}\\${white}&/g" \
+            -e "s/]/&\\${null}/g" \
+            -e "s/\\033\[0m/&\\${color}/g" \
+            -e "s/^\[/\\${white}&/" \
+            -e "s/^[^[]/\\${color}&/" \
+            -e "s/[^[]$/&\\${null}/")"
+    return 1
+}
+
 function pmng {
 
 	debug off
-	 
+	
+   	local verd="\033[32m"
+	local red="\033[31m"
+	local null="\033[0m"
+	local amarillo="\033[33m"
+	local white="\033[37m"
 	local ruta="${HOME}/.Path_save_cache.cache"
 	local temporal="${HOME}/.Path_save_cache.cache1"
 	
+
+	function env_cache { 
+	
+		if ! [[ -f ${ruta} ]];then  
+			echo -e "\nMe estas usando por primera vez😉!\n\nVoy a crear un fichero oculto en [ ${ruta} ]\nEsto con finalidad de manejar la cache.\nYa puedes empezar a guardar tus rutas."
+			touch ${ruta} && chmod 640 ${ruta}
+		fi
+	}
+
+
 	function help {
 		echo -e "\nUsage: Path_save [OPTIONS]... [NUMBER]...\n"
 		echo -e "Guarda las rutas mas (concurridas).\n"
@@ -70,28 +113,19 @@ function pmng {
 		echo -e "	-h,	Despliega la ayuda.!\n"
 	}
 
-	function env_cache { 
-	
-		if ! [[ -f ${ruta} ]];then  
-			echo -e "\nMe estas usando por primera vez😉!\n\nVoy a crear un fichero oculto en [ ${ruta} ]\nEsto con finalidad de manejar la cache.!\nYa puedes empezar a guardar tus rutas!\n"
-			touch ${ruta} && chmod 640 ${ruta}
-		fi
-	}
-
-
-	 function lista {
+	function lista {
 
 	 	local lista_argumento=$1
  			
 		if ! [[ -s ${ruta} ]];then		
-			echo -e "El Usuario:[ ${USER} ]\n❌No tiene rutas guardadas"			
+			Acierto_Error "Error" "El Usuario [${USER}] No tiene rutas guardadas"			
 		else 
 			if [[ ${lista_argumento} == all ]];then
 				echo -e "✅ Rutas:\n"
 				cat -n ${ruta}					
 			else 	
 				echo -e "✅ Ruta Numero [ ${lista_argumento} ]\n"
-				nl -n'ln' ${ruta}| grep --color=never -w  ^"[${lista_argumento}]"
+				cat -n ${ruta}| grep --color=never -w "${lista_argumento}"
 			fi 	
 		fi
 	}
@@ -100,7 +134,7 @@ function pmng {
 
 		(egrep -qw "^$(pwd)$" "${ruta}")
 		if [[ $? -eq 0 ]];then
- 			echo "✅ Esta ruta esta guardada!"
+ 			Acierto_Error "Acierto" "Esta ruta esta guardada!"
 		else 
 
 			rutas_disponibles=$(echo -n $(cat -n ${ruta} | grep "[0-99].[[:space:]]$"))
@@ -116,19 +150,19 @@ function pmng {
 						
 						awk -v rutapwd="$(pwd)" -v numero=${Numero_de_ruta_disponible} 'NR==numero { $0 = rutapwd } 1' ${ruta} > ${temporal}
 						mv ${temporal} ${ruta}
-						echo -e "✅ Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]" 
+						Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]" 
 					else
-						echo "❌Error ese ID esta ocupado"
+						Acierto_Error "Error" "El ID [${Numero_de_ruta_disponible}] esta ocupado"
 						break	
 					fi
 				else 
 					pwd >> ${ruta}
-					echo -e "✅ Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]"
+					Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]"
 
 				fi
 			else
 				pwd >> ${ruta}
-				echo -e "✅ Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]"	
+				Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]"	
 			fi
 		fi
 
@@ -143,14 +177,14 @@ function pmng {
 				 	sed "s/^[[:alnum:]].*[[:space:]]//g")"	
 			
 			if [[ -d ${ruta_moverme} ]];then
-				cd ${ruta_moverme} && echo -e "✅ Comando Exictoso\nNueva ruta:[ $(pwd) ]"
+				cd ${ruta_moverme} && Acierto_Error "Acierto" "Comando Exictoso\nNueva ruta:[ $(pwd) ]"
 					
 			else 
-				echo -e "❌No exite una ruta con el ID: [${moverme_argumento}]...!"
+				Acierto_Error "Error" "No exite una ruta con el ID: [${moverme_argumento}]...!"
 			fi  
 		
 		else 
-		 	echo -e "❌Hacia donde quieres moverte❓..."				
+		 	Acierto_Error "Error" 'Hacia donde quieres moverte❓...'				
 		
 		fi 	 		
 	}
@@ -162,7 +196,7 @@ function pmng {
 
 		if [[ -n ${numero_lineas_existe} ]];then
 
-			sed -i "${remover_argumento}s/.*/ /" ${ruta} && echo -e "✅ Comando Exictoso\n Ruta: [ $remover_argumento ] Borrada...\n"
+			sed -i "${remover_argumento}s/.*/ /" ${ruta} && Acierto_Error "Acierto" "Comando Exictoso\n Ruta: [ $remover_argumento ] Borrada...\n"
 		
 			numero_lineas=$(cat -n ${ruta} | grep  -A1 "[0-99].[[:space:]]$"|wc -l)
 			if [[ $numero_lineas -eq 1 ]];then
@@ -172,7 +206,7 @@ function pmng {
 			lista all
 
 		else 
-			echo -e "❌No exite una ruta con el ID: [ ${remover_argumento} ]...!"
+			Acierto_Error "Error" "No exite una ruta con el ID: [ ${remover_argumento} ]...!"
 		fi
 
 	}
@@ -212,5 +246,4 @@ function pmng {
 	done 
 
 	debug off
-
 }
