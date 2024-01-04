@@ -40,14 +40,25 @@
 #
 ##################################################################################################
 
+function debug {
+	set +x
+	local interruptor=$1
+	
+	if [[ ${interruptor} = off ]];then
+		set +x
+	elif [[ ${interruptor} = on ]];then
+		set -x
+	fi	
+}
+
 
 function pmng {
 
-##DEBUG
-#set -x
+	debug off
 	 
 	local ruta="${HOME}/.Path_save_cache.cache"
 	local temporal="${HOME}/.Path_save_cache.cache1"
+	
 	function help {
 		echo -e "\nUsage: Path_save [OPTIONS]... [NUMBER]...\n"
 		echo -e "Guarda las rutas mas (concurridas).\n"
@@ -200,6 +211,6 @@ function pmng {
 
 	done 
 
-##DEBUG
-#set +x
+	debug off
+
 }
