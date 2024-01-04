@@ -35,8 +35,6 @@
 #								
 ##BUGS 
 #
-#		Cuando se intente buscar una ruta con un ID que no exista tiene que dar error
-#
 #		Listar una ruta esta solo debe recibir parámetros numéricos
 #		
 #		Agregar más funciones para reemplazar el código repetido y mal escrito 
@@ -124,8 +122,15 @@ function pmng {
 				echo -e "✅ Rutas:\n"
 				cat -n ${ruta}					
 			else 	
-				echo -e "✅ Ruta Numero [ ${lista_argumento} ]\n"
-				cat -n ${ruta}| grep --color=never -w "${lista_argumento}"
+				ruta_listada_del_argumento=$(cat -n ${ruta}| grep --color=never -w "${lista_argumento}")	
+			
+				if [[ -n ${ruta_listada_del_argumento} ]];then	
+					Acierto_Error "Acierto" "Ruta Numero [ ${lista_argumento} ]\n"
+					echo ${ruta_listada_del_argumento}
+				else 
+					Acierto_Error "Error" "No exite una ruta con el ID: [ ${lista_argumento} ]...!"
+				fi
+
 			fi 	
 		fi
 	}
