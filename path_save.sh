@@ -33,14 +33,18 @@
 #		p=path mng=manager
 #		 	  
 #								
-##BUGS 
+##BUGS y updates
 #
 #		Listar una ruta esta solo debe recibir parámetros numéricos
 #		
 #		Agregar más funciones para reemplazar el código repetido y mal escrito 
 #
 #		Guardar rutas sin tener que estar ubicado en el path(agregar lectura de parámetros para la función save)
-#
+#		
+#		Que muestre la ayuda cuando no se reciben argumentos
+#		
+#		Quitar el argumento all de la funcion listar, este debe de ejecutarse con solo la opcion -l  
+#	
 ##################################################################################################
 
 
@@ -55,7 +59,6 @@ function debug {
 		set -x
 	fi	
 }
-
 
 function Acierto_Error {
   
@@ -114,24 +117,23 @@ function pmng {
 	function lista {
 
 	 	local lista_argumento=$1
- 			
+		
 		if ! [[ -s ${ruta} ]];then		
 			Acierto_Error "Error" "El Usuario [${USER}] No tiene rutas guardadas"			
-		else 
-			if [[ ${lista_argumento} == all ]];then
-				echo -e "✅ Rutas:\n"
-				cat -n ${ruta}					
-			else 	
-				ruta_listada_del_argumento=$(cat -n ${ruta}| grep --color=never -w "${lista_argumento}")	
+		 
+		elif [[ -z ${lista_argumento} ]];then
+			echo -e "✅ Rutas:\n"
+			cat -n ${ruta}					
+		else 	
+			ruta_listada_del_argumento=$(cat -n ${ruta}| grep --color=never -w "${lista_argumento}")	
 			
-				if [[ -n ${ruta_listada_del_argumento} ]];then	
-					Acierto_Error "Acierto" "Ruta Numero [ ${lista_argumento} ]\n"
-					echo ${ruta_listada_del_argumento}
-				else 
-					Acierto_Error "Error" "No exite una ruta con el ID: [ ${lista_argumento} ]...!"
-				fi
-
-			fi 	
+			if [[ -n ${ruta_listada_del_argumento} ]];then	
+				Acierto_Error "Acierto" "Ruta Numero [ ${lista_argumento} ]\n"
+				echo ${ruta_listada_del_argumento}
+			else 
+				Acierto_Error "Error" "No exite una ruta con el ID: [ ${lista_argumento} ]...!"
+			fi
+ 	
 		fi
 	}
 
@@ -218,11 +220,12 @@ function pmng {
 
 
 	OPTIND=1
-	while getopts "l:r:m:hs" options
+	while getopts "r:m:hsl" options
 	do
 		case ${options} in
 			l)
-			lista ${OPTARG}
+			OPTARG=$2
+			lista ${OPTARG}	
 			env_cache
 			;;
 			s)
