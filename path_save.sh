@@ -102,14 +102,16 @@ function pmng {
 
 
 	function help {
-		echo -e "\nUsage: Path_save [OPTIONS]... [NUMBER]...\n"
+		
+		echo -e "\nUsage: Path_save [OPTIONS]... [ID/Path]...\n"
 		echo -e "Guarda las rutas mas (concurridas).\n"
 		echo -e "Options:\n"
-		echo -e "	-l,	Lista todas las rutas guardadas. argumento(opcional): [Numero].\n" 
-		echo -e "	-s,	Guarda la ruta donde actualmente estas situado.\n"
-		echo -e "	-m,	Moverse atravez de las ruta seleccionada, argumento: [Numero]\n"
-		echo -e "	-r,	Remueve la ruta que se ponga en el argumento: [Numero].\n" 
+		echo -e "	-l,	Lista todas las rutas guardadas, argumento(opcional): [ID].\n" 
+		echo -e "	-s,	Guarda la ruta donde actualmente estas situado, argumento(opcional): [Path].\n"
+		echo -e "	-m,	Moverse atravez de las ruta seleccionada, argumento: [ID]\n"
+		echo -e "	-r,	Remueve/Elimina la ruta de la cache, argumento: [ID].\n" 
 		echo -e "	-h,	Despliega la ayuda.!\n"
+	
 	}
 
 	function lista {
@@ -139,7 +141,7 @@ function pmng {
 
 		(egrep -qw "^$(pwd)$" "${ruta}")
 		if [[ $? -eq 0 ]];then
- 			Acierto_Error "Acierto" "Esta ruta esta guardada!"
+ 			Acierto_Error "Error" "Esta ruta esta guardada!"
 		else 
 
 			rutas_disponibles=$(echo -n $(cat -n ${ruta} | grep "[0-99].[[:space:]]$"))
