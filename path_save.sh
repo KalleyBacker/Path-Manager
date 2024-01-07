@@ -123,7 +123,7 @@ function pmng {
 			echo -e "✅ Rutas:\n"
 			cat -n ${ruta}					
 		else 	
-			ruta_listada_del_argumento=$(cat -n ${ruta}| grep --color=never -w "${lista_argumento}")	
+			ruta_listada_del_argumento=$(cat -n ${ruta}| grep --color=never -w "^[ ]*[ ]${lista_argumento}")	
 			
 			if [[ -n ${ruta_listada_del_argumento} ]];then	
 				Acierto_Error "Acierto" "Ruta Numero [ ${lista_argumento} ]\n"
