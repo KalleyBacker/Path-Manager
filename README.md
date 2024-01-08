@@ -20,7 +20,7 @@
 ## Tabla de contenido
 
 * [Sobre el proyecto](#Sobre-el-proyecto)
-* [Instalacion](#Instalacion)
+* [Instalacion](#Instalacion-en-bash)
 * [Uso](#Uso)
 * [Autor](#Autor)
 * [Agradecimientos](#Agradecimientos)
