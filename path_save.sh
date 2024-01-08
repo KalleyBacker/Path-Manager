@@ -1,48 +1,18 @@
 #!/bin/bash
-#
-#
-##Author: 
-#
-#		[ KalleyBacker ]
-#  
-#
-##Linkedin 
-#   
-#   	[ https://www.linkedin.com/in/juan-carlos-morla-reyes-6410a91b3 ]
-#
-##Instagram
-#
-#		[ https://www.instagram.com/linux_debugging ]
-#
-##VERSION 
-#      
-#		[ 1.3 ] 
-#
-#
-##NAME 
-#       path_save.sh  
-#
-##SYNOPSIS
-#		   
-#		pmng {argumento} {parametro}
-#
-#
-##DESCRIPTION
-#
-#		Administrador de rutas concurrentes
-#		p=path mng=manager
-#		 	  
-#								
+
+#Author: [ KalleyBacker ]
+
+
 ##BUGS y updates
 #
-#		Listar una ruta esta solo debe recibir parámetros numéricos
-#		
-#		Agregar más funciones para reemplazar el código repetido y mal escrito 
+#		Guardar rutas sin tener que estar ubicado en el path(agregar lectura de parámetros para la función save).
 #
-#		Guardar rutas sin tener que estar ubicado en el path(agregar lectura de parámetros para la función save)
-#		
-#		Que muestre la ayuda cuando no se reciben argumentos
-#		  
+#		Que muestre el ID de la ruta cuando se guarda.
+#
+#	    Crear funcion para buscar las rutas y el ID.  
+#
+#		Agregar el id de las rutas al fichero cache para que sean permanentes.
+#	
 ##################################################################################################
 
 
@@ -104,13 +74,13 @@ function pmng {
 	function help {
 		
 		echo -e "\nUsage: Path_save [OPTIONS]... [ID/Path]...\n"
-		echo -e "Guarda las rutas mas (concurridas).\n"
+		echo -e "Guarda las rutas mas concurridas.\n"
 		echo -e "Options:\n"
 		echo -e "	-l,	Lista todas las rutas guardadas, argumento(opcional): [ID].\n" 
 		echo -e "	-s,	Guarda la ruta donde actualmente estas situado, argumento(opcional): [Path].\n"
 		echo -e "	-m,	Moverse atravez de las ruta seleccionada, argumento: [ID]\n"
 		echo -e "	-r,	Remueve/Elimina la ruta de la cache, argumento: [ID].\n" 
-		echo -e "	-h,	Despliega la ayuda.!\n"
+		echo -e "	-h,	Despliega la ayuda.\n"
 	
 	}
 
@@ -203,14 +173,14 @@ function pmng {
 
 		if [[ -n ${numero_lineas_existe} ]];then
 
-			sed -i "${remover_argumento}s/.*/ /" ${ruta} && Acierto_Error "Acierto" "Comando Exictoso\n Ruta: [ $remover_argumento ] Borrada...\n"
+			sed -i "${remover_argumento}s/.*/ /" ${ruta} && Acierto_Error "Acierto" "Comando Exictoso\nRuta: [ ${remover_argumento} ] Borrada..."
 		
 			numero_lineas=$(cat -n ${ruta} | grep  -A1 "[0-99].[[:space:]]$"|wc -l)
 			if [[ $numero_lineas -eq 1 ]];then
 				numero_de_linea_eliminar=$(cat -n /home/jcarlos/.Path_save_cache.cache  | grep "[0-99].[[:space:]]$")
 				sed -i "${numero_de_linea_eliminar}d" ${ruta}		
 			fi 
-			lista all
+			#lista ${remover_argumento}
 
 		else 
 			Acierto_Error "Error" "No exite una ruta con el ID: [ ${remover_argumento} ]...!"
@@ -229,8 +199,14 @@ function pmng {
 			env_cache
 			;;
 			s)
-			save
-			env_cache
+			OPTARG=$2 
+			if [[ -n $OPTARG ]];then 
+
+				Acierto_Error "Error" "Esta opcion no recibe parametros"			
+			else	
+				save
+				env_cache
+			fi	
 			;;		
 			r)
 			remover ${OPTARG}
@@ -244,14 +220,25 @@ function pmng {
 			help
 			env_cache
 			;;
-			*)
-			env_cache
-            echo "Opción no válida: ${OPTARG}"
+			*)	 	
+            Acierto_Error "Error" "Opción no válida: [ ${OPTARG} ]"
             help
+            env_cache
             ;;
 		esac
 
 	done 
 
+	if [[ $1 == [-] ]];then	
+
+		Acierto_Error "Error" "Parametro no valido [ $1 ]"
+		help	
+	elif [[ -z $1 ]];then	
+		Acierto_Error "Error" "Agrege un parametro"
+		help	
+	elif ! [[ $1 =~ ^[-] ]];then
+		Acierto_Error "Error" "Parametro no valido [ $1 ]"
+		help	
+	fi	
 	debug off
 }
