@@ -38,26 +38,26 @@ Este proyecto fue creado con el propósito de facilitar la movilidad en rutas mu
 
 1. Clona el repositorio
 
-```bash
+```sh
 git clone https://github.com/KalleyBacker/Path-Manager.git
 ```
 
 
 2. Crea el directorio .functions.d
 
-```bash
+```sh
 mkdir ~/.functions.d"
 ```
 
 3. Copia el script en el directorio .functions.d
 
-```bash
+```sh
 cp ~/Path-Manager/path_save.sh $HOME/.functions.d/
 ```
 
 4. Configura la carga automática en tu archivo ~/.bashrc
 
-```bash
+```sh
 # Cargar scripts en .functions.d
 for script in "${HOME}/.functions.d/*"
 do
@@ -66,7 +66,7 @@ done
 ```
 5. Carga la configuracion del bashrc
 
-```bash
+```sh
 source ~/.bashrc
 ```
  <br/>
