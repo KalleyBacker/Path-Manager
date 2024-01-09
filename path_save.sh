@@ -177,7 +177,7 @@ function pmng {
 		
 			numero_lineas=$(cat -n ${ruta} | grep  -A1 "[0-99].[[:space:]]$"|wc -l)
 			if [[ $numero_lineas -eq 1 ]];then
-				numero_de_linea_eliminar=$(cat -n /home/jcarlos/.Path_save_cache.cache  | grep "[0-99].[[:space:]]$")
+				numero_de_linea_eliminar=$(cat -n ${ruta} | grep "[0-99].[[:space:]]$")
 				sed -i "${numero_de_linea_eliminar}d" ${ruta}		
 			fi 
 			#lista ${remover_argumento}
