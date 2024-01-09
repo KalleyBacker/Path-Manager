@@ -38,26 +38,26 @@ Este proyecto fue creado con el propósito de facilitar la movilidad en rutas mu
 
 1. Clona el repositorio
 
-```sh
+```java
 git clone https://github.com/KalleyBacker/Path-Manager.git
 ```
 
 
 2. Crea el directorio .functions.d
 
-```sh
+```java
 mkdir ~/.functions.d"
 ```
 
 3. Copia el script en el directorio .functions.d
 
-```sh
+```java
 cp ~/Path-Manager/path_save.sh $HOME/.functions.d/
 ```
 
 4. Configura la carga automática en tu archivo ~/.bashrc
 
-```sh
+```java
 # Cargar scripts en .functions.d
 for script in "${HOME}/.functions.d/*"
 do
@@ -66,7 +66,7 @@ done
 ```
 5. Carga la configuracion del bashrc
 
-```sh
+```java
 source ~/.bashrc
 ```
  <br/>
@@ -75,7 +75,7 @@ source ~/.bashrc
 
 1. Guardar la ruta actual:
 
-```bash
+```java
 pmng -s
 ```
 <img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/dfbd7dd1-2a6b-4af2-a060-94cbd4b8654b" alt="Logo" width="1010" height="200">
