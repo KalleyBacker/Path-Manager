@@ -28,6 +28,13 @@ function debug {
 	fi	
 }
 
+function filter ()
+{ 
+    local fila=$1;
+    local columna=$2;
+    cat -n ${ruta} | awk -v c=${columna} -v f=${fila} 'NR==f {print $c}'
+}
+
 function Acierto_Error {
   
    	local pregunta=$1
@@ -174,10 +181,15 @@ function pmng {
 
 		if [[ -n ${numero_lineas_existe} ]];then
 			
-			ruta_existe=$(filter ${remover_argumento} 2)
+			ruta_existe="$(filter ${remover_argumento} 2)"
 			if [[ -n ${ruta_existe}	]];then	
+				
 				sed -i "${remover_argumento}s/.*/ /" ${ruta} && Acierto_Error "Acierto" "Comando Exictoso\nRuta: [ ${remover_argumento} ] Borrada..."
-		
+
+
+				for (( lineas = 0; i < 10; i++ )); do
+					#statements
+				done
 				numero_lineas=$(cat -n ${ruta} | grep  -A1 "[0-99].[[:space:]]$"|wc -l)
 				if [[ $numero_lineas -eq 1 ]];then
 					numero_de_linea_eliminar=$(cat -n ${ruta} | grep "[0-99].[[:space:]]$")
