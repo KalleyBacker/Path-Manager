@@ -157,7 +157,7 @@ function pmng {
 				cd ${ruta_moverme} && Acierto_Error "Acierto" "Comando Exictoso\nNueva ruta:[ $(pwd) ]"
 					
 			else 
-				Acierto_Error "Error" "No exite una ruta con el ID: [${moverme_argumento}]...!"
+				Acierto_Error "Error" "No exite una ruta con el ID: [ ${moverme_argumento} ]...!"
 			fi  
 		
 		else 
