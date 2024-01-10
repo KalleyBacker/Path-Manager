@@ -7,9 +7,7 @@
 #
 #		Guardar rutas sin tener que estar ubicado en el path(agregar lectura de parámetros para la función save).
 #
-#		Que muestre el ID de la ruta cuando se guarda.
-#
-#	    Crear funcion para buscar las rutas y el ID.  
+#		Que muestre el ID de la ruta cuando se guarda.  
 #
 #		Agregar el id de las rutas al fichero cache para que sean permanentes.
 #	
@@ -176,7 +174,6 @@ function pmng {
 	function remover {
 
 		local remover_argumento=$1
-		#numero_lineas_existe="$(cat -n ${ruta}|grep -wo ${remover_argumento})"
 		numero_lineas_existe="$(filter ${remover_argumento} 1)"
 
 		if [[ -n ${numero_lineas_existe} ]];then
@@ -186,6 +183,7 @@ function pmng {
 				
 				sed -i "${remover_argumento}s/.*/ /" ${ruta} && Acierto_Error "Acierto" "Comando Exictoso\nRuta: [ ${remover_argumento} ] Borrada..."
 
+				#limpieza de id no utilizados
 				total_numero_lineas=$(cat -n ${ruta}|wc -l)
 				total1=${total_numero_lineas}
 				
