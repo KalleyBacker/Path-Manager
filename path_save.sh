@@ -157,7 +157,7 @@ function pmng {
 				cd ${ruta_moverme} && Acierto_Error "Acierto" "Comando Exictoso\nNueva ruta:[ $(pwd) ]"
 					
 			else 
-				Acierto_Error "Error" "No exite una ruta con el ID: [${moverme_argumento}]...!"
+				Acierto_Error "Error" "No exite una ruta con el ID: [ ${moverme_argumento} ]...!"
 			fi  
 		
 		else 
@@ -169,19 +169,24 @@ function pmng {
 	function remover {
 
 		local remover_argumento=$1
-		numero_lineas_existe="$(cat -n ${ruta}|grep -wo ${remover_argumento})"
+		#numero_lineas_existe="$(cat -n ${ruta}|grep -wo ${remover_argumento})"
+		numero_lineas_existe="$(filter ${remover_argumento} 1)"
 
 		if [[ -n ${numero_lineas_existe} ]];then
-
-			sed -i "${remover_argumento}s/.*/ /" ${ruta} && Acierto_Error "Acierto" "Comando Exictoso\nRuta: [ ${remover_argumento} ] Borrada..."
+			
+			ruta_existe=$(filter ${remover_argumento} 2)
+			if [[ -n ${ruta_existe}	]];then	
+				sed -i "${remover_argumento}s/.*/ /" ${ruta} && Acierto_Error "Acierto" "Comando Exictoso\nRuta: [ ${remover_argumento} ] Borrada..."
 		
-			numero_lineas=$(cat -n ${ruta} | grep  -A1 "[0-99].[[:space:]]$"|wc -l)
-			if [[ $numero_lineas -eq 1 ]];then
-				numero_de_linea_eliminar=$(cat -n ${ruta} | grep "[0-99].[[:space:]]$")
-				sed -i "${numero_de_linea_eliminar}d" ${ruta}		
-			fi 
-			#lista ${remover_argumento}
+				numero_lineas=$(cat -n ${ruta} | grep  -A1 "[0-99].[[:space:]]$"|wc -l)
+				if [[ $numero_lineas -eq 1 ]];then
+					numero_de_linea_eliminar=$(cat -n ${ruta} | grep "[0-99].[[:space:]]$")
+					sed -i "${numero_de_linea_eliminar}d" ${ruta}
+				fi
+			else 	
+				Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ ${remover_argumento} ]...!"
 
+			fi 	 
 		else 
 			Acierto_Error "Error" "No exite una ruta con el ID: [ ${remover_argumento} ]...!"
 		fi
