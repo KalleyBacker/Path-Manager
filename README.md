@@ -12,7 +12,7 @@
     <a href="https://github.com/KalleyBacker/Path-Manager"><strong>Explora los documentos »</strong></a>
     <br/>
     <a href="https://github.com/KalleyBacker/Path-Manager/issues">Reportar un error »</a>
-    
+
   </p>
 </p>
 <br/>
@@ -26,7 +26,7 @@
 * [Agradecimientos](#Agradecimientos)
 
 <br/>
- 
+
 ## Sobre el proyecto
 
 
@@ -48,15 +48,11 @@ git clone https://github.com/KalleyBacker/Path-Manager.git
 ```bash
 mkdir ~/.functions.d"
 ```
-
 3. Copia el script en el directorio .functions.d
-
 ```bash
 cp ~/Path-Manager/path_save.sh "$HOME/.functions.d/"
 ```
-
 4. Configura la carga automática en tu archivo ~/.bashrc
-
 ```bash
 # Cargar scripts en .functions.d
 for script in "${HOME}/.functions.d/*"
@@ -65,82 +61,57 @@ do
 done
 ```
 5. Carga la configuracion del bashrc
-
 ```bash
 source ~/.bashrc
 ```
  <br/>
-
 ## Uso
-
 1. Guardar la ruta actual:
-
 ```bash
 pmng -s
 ```
 <img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/dfbd7dd1-2a6b-4af2-a060-94cbd4b8654b" alt="Logo" width="1010" height="200">
-
 <br/>
 <br/>
 <br/>
 <br/>
  
 2. Listar todas las rutas guardadas:
-
 ```bash
 pmng -l
 ```
 <img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/ef4f2721-edac-49fe-967e-32f737a2d747" alt="Logo" width="1020" height="400">
-
 <br/>
 <br/>
 <br/>
 <br/>
-
-
 3. Moverse a través de una ruta específica:
-
 ```bash
 pmng -m 1
 ```
 <img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/f8400601-dfa1-4e9c-a92f-5c7b7bfee8ec" alt="Logo" width="1010" height="200">
-
 <br/>
 <br/>
 <br/>
 <br/>
-
 4. Eliminar una ruta de la cache:
-
 ```bash
 pmng -r 2
 ```
 <img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/54332974-a5c8-49b8-b1b9-8c711e0d5fb5" alt="Logo" width="700" height="200">
-
 <br/>
 <br/>
 <br/>
 <br/>
-
-
 5. Despliega la ayuda:
-
 ```bash
 pmng -h
 ```
 <img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/35352eae-2a3d-4d0e-8765-12f4659292d0" alt="Logo" width="1010" height="500">
-
-
-
 <br/>
-
 ## Autor
  
-
 * **Juan Carlos Morla Reyes** - [KalleyBacker](https://github.com/KalleyBacker) 
-
 <br/>
-
 ## Agradecimientos
-
 * [ShaanCoding](https://readme.shaankhan.dev/)
