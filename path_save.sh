@@ -186,18 +186,20 @@ function pmng {
 				
 				sed -i "${remover_argumento}s/.*/ /" ${ruta} && Acierto_Error "Acierto" "Comando Exictoso\nRuta: [ ${remover_argumento} ] Borrada..."
 
-
-				for (( lineas = 0; i < 10; i++ )); do
-					#statements
+				total_numero_lineas=$(cat -n ${ruta}|wc -l)
+				total1=${total_numero_lineas}
+				
+				for (( i = 1; i <= ${total_numero_lineas}; i++ )); do
+					no_existe=$(filter ${total1} 2)
+					if 	[[ -z $no_existe ]];then	
+     					sed -i "${total1}d" ${ruta}
+   				    else
+       					break
+    				fi				
+    			   ((total1--)) 
 				done
-				numero_lineas=$(cat -n ${ruta} | grep  -A1 "[0-99].[[:space:]]$"|wc -l)
-				if [[ $numero_lineas -eq 1 ]];then
-					numero_de_linea_eliminar=$(cat -n ${ruta} | grep "[0-99].[[:space:]]$")
-					sed -i "${numero_de_linea_eliminar}d" ${ruta}
-				fi
 			else 	
 				Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ ${remover_argumento} ]...!"
-
 			fi 	 
 		else 
 			Acierto_Error "Error" "No exite una ruta con el ID: [ ${remover_argumento} ]...!"
