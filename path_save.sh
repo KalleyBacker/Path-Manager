@@ -113,7 +113,7 @@ function pmng {
 
 	function save {
 
-		(egrep -qw "^$(pwd)$" "${ruta}")
+		(grep -qwE "^$(pwd)$" "${ruta}")
 		if [[ $? -eq 0 ]];then
  			Acierto_Error "Error" "Esta ruta esta guardada!"
  			return 1
@@ -166,7 +166,7 @@ function pmng {
 				else
 					cd ${ruta_moverme} && Acierto_Error "Acierto" "Comando Exictoso\nNueva ruta:[ $(pwd) ]"
 	
-				fi 				
+				fi			
 			else 
 				Acierto_Error "Error" "No exite una ruta con el ID: [ ${moverme_argumento} ]...!"
 				return 1
