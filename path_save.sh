@@ -26,8 +26,7 @@ function debug {
 	fi	
 }
 
-function filter ()
-{ 
+function filter { 
     local fila=$1;
     local columna=$2;
     cat -n ${ruta} | awk -v c=${columna} -v f=${fila} 'NR==f {print $c}'
@@ -51,7 +50,6 @@ function Acierto_Error {
             -e "s/^\[/\\${white}&/" \
             -e "s/^[^[]/\\${color}&/" \
             -e "s/[^[]$/&\\${null}/")"
-    return 1
 }
 
 function pmng {
@@ -95,7 +93,7 @@ function pmng {
 		
 		if ! [[ -s ${ruta} ]];then		
 			Acierto_Error "Error" "El Usuario [${USER}] No tiene rutas guardadas"			
-		 
+		 	return 1
 		elif [[ -z ${lista_argumento} ]];then
 			echo -e "✅ Rutas:\n"
 			cat -n ${ruta}					
@@ -107,6 +105,7 @@ function pmng {
 				echo ${ruta_listada_del_argumento}
 			else 
 				Acierto_Error "Error" "No exite una ruta con el ID: [ ${lista_argumento} ]...!"
+				return 1
 			fi
  	
 		fi
@@ -117,6 +116,7 @@ function pmng {
 		(egrep -qw "^$(pwd)$" "${ruta}")
 		if [[ $? -eq 0 ]];then
  			Acierto_Error "Error" "Esta ruta esta guardada!"
+ 			return 1
 		else 
 
 			rutas_disponibles=$(echo -n $(cat -n ${ruta} | grep "[0-99].[[:space:]]$"))
@@ -135,6 +135,7 @@ function pmng {
 						Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]" 
 					else
 						Acierto_Error "Error" "El ID [${Numero_de_ruta_disponible}] esta ocupado"
+						return 1
 						break	
 					fi
 				else 
@@ -159,14 +160,21 @@ function pmng {
 				 	sed "s/^[[:alnum:]].*[[:space:]]//g")"	
 			
 			if [[ -d ${ruta_moverme} ]];then
-				cd ${ruta_moverme} && Acierto_Error "Acierto" "Comando Exictoso\nNueva ruta:[ $(pwd) ]"
-					
+				
+				if	[[ $(pwd) == ${ruta_moverme} ]];then
+					Acierto_Error "Acierto" "Ya estamos en la ubicacion [ ${ruta_moverme} ]"
+				else
+					cd ${ruta_moverme} && Acierto_Error "Acierto" "Comando Exictoso\nNueva ruta:[ $(pwd) ]"
+	
+				fi 				
 			else 
 				Acierto_Error "Error" "No exite una ruta con el ID: [ ${moverme_argumento} ]...!"
+				return 1
 			fi  
 		
 		else 
-		 	Acierto_Error "Error" 'Hacia donde quieres moverte❓...'				
+		 	Acierto_Error "Error" 'Hacia donde quieres moverte❓...'
+		 	return 1				
 		
 		fi 	 		
 	}
@@ -198,9 +206,11 @@ function pmng {
 				done
 			else 	
 				Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ ${remover_argumento} ]...!"
+				return 1
 			fi 	 
 		else 
 			Acierto_Error "Error" "No exite una ruta con el ID: [ ${remover_argumento} ]...!"
+			return 1
 		fi
 
 	}
@@ -220,6 +230,7 @@ function pmng {
 			if [[ -n $OPTARG ]];then 
 
 				Acierto_Error "Error" "Esta opcion no recibe parametros"			
+				return 1
 			else	
 				save
 				env_cache
@@ -241,6 +252,7 @@ function pmng {
             Acierto_Error "Error" "Opción no válida: [ ${OPTARG} ]"
             help
             env_cache
+            return 1
             ;;
 		esac
 
