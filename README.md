@@ -65,11 +65,15 @@ done
 source ~/.bashrc
 ```
  <br/>
+
 ## Uso
+
 1. Guardar la ruta actual:
+
 ```bash
 pmng -s
 ```
+
 <img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/dfbd7dd1-2a6b-4af2-a060-94cbd4b8654b" alt="Logo" width="1010" height="200">
 <br/>
 <br/>
