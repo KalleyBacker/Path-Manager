@@ -53,13 +53,11 @@ mkdir ~/.functions.d"
 cp ~/Path-Manager/path_save.sh "$HOME/.functions.d/"
 ```
 4. Configura la carga automática en tu archivo ~/.bashrc
+
 ```bash
-# Cargar scripts en .functions.d
-for script in "${HOME}/.functions.d/*"
-do
-    source "$script"
-done
+echo -e '#source_script\nfor script in "${HOME}/.functions.d/*"\ndo\n\tsource "$script"\ndone' >> ~/.bashrc
 ```
+
 5. Carga la configuracion del bashrc
 ```bash
 source ~/.bashrc
