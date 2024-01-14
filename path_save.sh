@@ -27,9 +27,16 @@ function debug {
 }
 
 function filter { 
-    local fila=$1;
-    local columna=$2;
-    cat -n ${ruta} | awk -v c=${columna} -v f=${fila} 'NR==f {print $c}'
+    
+    local fila=$1
+    local columna=$2
+    local total=$3
+   
+    if [[ ${total} == all ]];then
+    	cat -n ${ruta}	
+    else
+    	cat -n ${ruta} | awk -v c=${columna} -v f=${fila} 'NR==f {print $c}'
+    fi
 }
 
 function Acierto_Error {
@@ -140,12 +147,11 @@ function pmng {
 					fi
 				else 
 					pwd >> ${ruta}
-					Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]"
-
+					Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ] ID asociado: [ $(filter 0 0 all|tail -n1 |awk '{print $1}') ]"
 				fi
 			else
-				pwd >> ${ruta}
-				Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]"	
+				pwd >> ${ruta}	
+				Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ] ID asociado: [ $(filter 0 0 all|tail -n1 |awk '{print $1}') ]"
 			fi
 		fi
 
