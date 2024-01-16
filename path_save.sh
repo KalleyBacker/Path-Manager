@@ -5,11 +5,7 @@
 
 ##BUGS y updates
 #
-#		Guardar rutas sin tener que estar ubicado en el path(agregar lectura de parámetros para la función save).
-#
-#		Que muestre el ID de la ruta cuando se guarda.  
-#
-#		Agregar el id de las rutas al fichero cache para que sean permanentes.
+#		Guardar rutas sin tener que estar ubicado en el path(agregar lectura de parámetros para la función save).  
 #	
 ##################################################################################################
 
@@ -105,7 +101,7 @@ function pmng {
 			echo -e "✅ Rutas:\n"
 			cat -n ${ruta}					
 		else 	
-			ruta_listada_del_argumento=$(cat -n ${ruta}| grep --color=never -w "^[ ]*[ ]${lista_argumento}")	
+			ruta_listada_del_argumento=$(filter 0 0 all| grep --color=never -w "^[ ]*[ ]${lista_argumento}")	
 			
 			if [[ -n ${ruta_listada_del_argumento} ]];then	
 				Acierto_Error "Acierto" "Ruta Numero [ ${lista_argumento} ]\n"
@@ -120,40 +116,53 @@ function pmng {
 
 	function save {
 
-		(grep -qwE "^$(pwd)$" "${ruta}")
-		if [[ $? -eq 0 ]];then
- 			Acierto_Error "Error" "Esta ruta esta guardada!"
- 			return 1
-		else 
+		local path_por_parametro=$1
+		
+		if [[ -z ${path_por_parametro} ]];then
+			path_por_parametro="$(pwd)"
+		fi	
+		
+		if [[ -d ${path_por_parametro} ]];then
 
-			rutas_disponibles=$(echo -n $(cat -n ${ruta} | grep "[0-99].[[:space:]]$"))
 
-			if [[ -n ${rutas_disponibles} ]];then
-				read -p 'Quiere enlazar esta ruta con un ID existente❓[Ss o Nn]: ' SoN
+			(grep -qwE "^${path_por_parametro}$" "${ruta}")
+			if [[ $? -eq 0 ]];then
+ 				Acierto_Error "Error" "Esta ruta esta guardada!"
+ 				return 1
+			else 
+
+				rutas_disponibles=$(echo -n $(filter 0 0 all | grep "[0-99].[[:space:]]$"))
+
+				if [[ -n ${rutas_disponibles} ]];then
+					read -p 'Quiere enlazar esta ruta con un ID existente❓[Ss o Nn]: ' SoN
 				
-				if [[ ${SoN} = [Ss] ]];then 
+					if [[ ${SoN} = [Ss] ]];then 
 
 						read -p "Cual ID de los disponibles quiere utilzar❓ [ ${rutas_disponibles} ]: " Numero_de_ruta_disponible
 					
-					if $(echo $rutas_disponibles| grep -q ${Numero_de_ruta_disponible});then
+						if $(echo $rutas_disponibles| grep -q ${Numero_de_ruta_disponible});then
 						
-						awk -v rutapwd="$(pwd)" -v numero=${Numero_de_ruta_disponible} 'NR==numero { $0 = rutapwd } 1' ${ruta} > ${temporal}
-						mv ${temporal} ${ruta}
-						Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ]" 
-					else
-						Acierto_Error "Error" "El ID [${Numero_de_ruta_disponible}] esta ocupado"
-						return 1
-						break	
+							awk -v rutapwd="${path_por_parametro}" -v numero=${Numero_de_ruta_disponible} 'NR==numero { $0 = rutapwd } 1' ${ruta} > ${temporal}
+							mv ${temporal} ${ruta}
+							Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ ${path_por_parametro} ]" 
+						else
+							Acierto_Error "Error" "El ID [${Numero_de_ruta_disponible}] esta ocupado"
+							return 1
+							break	
+						fi
+					else 
+						echo "${path_por_parametro}" >> ${ruta}
+						Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ ${path_por_parametro} ] ID asociado: [ $(filter 0 0 all|tail -n1 |awk '{print $1}') ]"
 					fi
-				else 
-					pwd >> ${ruta}
-					Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ] ID asociado: [ $(filter 0 0 all|tail -n1 |awk '{print $1}') ]"
+				else
+					echo "${path_por_parametro}" >> ${ruta}	
+					Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ ${path_por_parametro} ] ID asociado: [ $(filter 0 0 all|tail -n1 |awk '{print $1}') ]"
 				fi
-			else
-				pwd >> ${ruta}	
-				Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ $(pwd) ] ID asociado: [ $(filter 0 0 all|tail -n1 |awk '{print $1}') ]"
 			fi
-		fi
+		
+		else 
+			Acierto_Error "Error" "Ruta no existe [ ${path_por_parametro} ]"	
+		fi 	
 
 	}	
 
@@ -161,7 +170,7 @@ function pmng {
 		local moverme_argumento=$1
 		if [[ -n ${moverme_argumento} ]];then
 		
-			ruta_moverme="$(nl -n'ln' ${ruta}|\
+			ruta_moverme="$(filter 0 0 all|\
 				grep --color=never -w  ^"[${moverme_argumento}]"|\
 				 	sed "s/^[[:alnum:]].*[[:space:]]//g")"	
 			
@@ -233,14 +242,8 @@ function pmng {
 			;;
 			s)
 			OPTARG=$2 
-			if [[ -n $OPTARG ]];then 
-
-				Acierto_Error "Error" "Esta opcion no recibe parametros"			
-				return 1
-			else	
-				save
-				env_cache
-			fi	
+			save ${OPTARG}
+			env_cache
 			;;		
 			r)
 			remover ${OPTARG}
