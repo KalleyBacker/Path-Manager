@@ -3,9 +3,7 @@
 #Author: [ KalleyBacker ]
 
 
-##BUGS y updates
-#
-#		Guardar rutas sin tener que estar ubicado en el path(agregar lectura de parámetros para la función save).  
+##BUGS y updates  
 #	
 ##################################################################################################
 
@@ -170,26 +168,25 @@ function pmng {
 		local moverme_argumento=$1
 		if [[ -n ${moverme_argumento} ]];then
 		
-			ruta_moverme="$(filter 0 0 all|\
-				grep --color=never -w  ^"[${moverme_argumento}]"|\
-				 	sed "s/^[[:alnum:]].*[[:space:]]//g")"	
-			
-			if [[ -d ${ruta_moverme} ]];then
+			ruta_moverme="$(filter ${moverme_argumento} 2)"			
+			if [[ -n ${ruta_moverme} ]];then
+
+				if [[ -d ${ruta_moverme} ]];then
 				
-				if	[[ $(pwd) == ${ruta_moverme} ]];then
-					Acierto_Error "Acierto" "Ya estamos en la ubicacion [ ${ruta_moverme} ]"
-				else
-					cd ${ruta_moverme} && Acierto_Error "Acierto" "Comando Exictoso\nNueva ruta:[ $(pwd) ]"
-	
-				fi			
+					if	[[ $(pwd) == ${ruta_moverme} ]];then
+						Acierto_Error "Acierto" "Ya estamos en la ubicacion [ ${ruta_moverme} ]"
+					else
+						cd ${ruta_moverme} && Acierto_Error "Acierto" "Comando Exictoso\nNueva ruta:[ ${ruta_moverme} ]"
+					fi			
+				else 
+					Acierto_Error "Error" "La ruta [ $(filter ${moverme_argumento} 2) ] ya no existe...!"
+					Acierto_Error "Error" "Favor eliminar la ruta con el ID [ ${moverme_argumento} ]"
+				fi  
 			else 
-				Acierto_Error "Error" "No exite una ruta con el ID: [ ${moverme_argumento} ]...!"
-				return 1
-			fi  
-		
+				Acierto_Error "Error" "El ID: [ ${moverme_argumento} ] no tiene una ruta asignada..."
+			fi 	
 		else 
-		 	Acierto_Error "Error" 'Hacia donde quieres moverte❓...'
-		 	return 1				
+		 	Acierto_Error "Error" 'Hacia donde quieres moverte❓...'				
 		
 		fi 	 		
 	}
