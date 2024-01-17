@@ -104,9 +104,9 @@ function pmng {
 				ruta_listada_del_argumento=$(filter ${array_argumentos[${conteo}]} @)
 
 				if [[ -z ${ruta_listada_del_argumento} ]];then	
-					Acierto_Error "Error" "No exite una ruta con el ID: [ ${array_argumentos[${conteo}]} ]...!"
+					Acierto_Error "Error" "No exite una ruta con el ID: [ $(echo -n ${array_argumentos[${conteo}]}) ]...!"
 				else 
-					[[ -z ${ya_ejecutado} ]] && Acierto_Error "Acierto" "Ruta/s ID/s [ ${array_argumentos[@]} ]" &&echo &&ya_ejecutado=true
+					[[ -z ${ya_ejecutado} ]] && Acierto_Error "Acierto" "Ruta/s ID/s [ $(echo -n ${array_argumentos[@]}) ]" &&echo &&ya_ejecutado=true
 					echo ${ruta_listada_del_argumento}
 				fi		
 			done
@@ -208,13 +208,13 @@ function pmng {
 					ruta_existe="$(filter ${array_argumentos[${conteo}]} 2)"
 					if [[ -n ${ruta_existe}	]];then		
 							
-						[ -z ${ya_ejecutado} ] && Acierto_Error "Acierto" "Comando Exictoso\nID de Ruta/s: [ ${array_argumentos[@]} ] Borrada..." && ya_ejecutado=true
+						[ -z ${ya_ejecutado} ] && Acierto_Error "Acierto" "Comando Exictoso\nID de Ruta/s: [ $(echo -n ${array_argumentos[@]}) ] Borrada/s..." && ya_ejecutado=true
 						sed -i "${array_argumentos[${conteo}]}s/.*/ /" ${ruta}
 					else 	
-						Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ ${array_argumentos[${conteo}]} ]...!"		
+						Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ $(echo -n ${array_argumentos[${conteo}]}) ]...!"		
 					fi 	
 				else 
-					Acierto_Error "Error" "No exite una ruta con el ID: [ ${array_argumentos[${conteo}]} ]...!"
+					Acierto_Error "Error" "No exite una ruta con el ID: [ $(echo -n ${array_argumentos[${conteo}]}) ]...!"
 				fi								 		
 			done
 			unset ya_ejecutado
