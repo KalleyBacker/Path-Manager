@@ -4,6 +4,8 @@
 
 
 ##BUGS y updates  
+# 	
+#	
 #	
 ##################################################################################################
 
@@ -89,26 +91,26 @@ function pmng {
 	}
 
 	function lista {
-
-	 	local lista_argumento=$1
 		
 		if ! [[ -s ${ruta} ]];then		
 			Acierto_Error "Error" "El Usuario [${USER}] No tiene rutas guardadas"			
-		 	return 1
-		elif [[ -z ${lista_argumento} ]];then
+		elif [[ -z ${array_argumentos[@]} ]];then
 			echo -e "✅ Rutas:\n"
 			cat -n ${ruta}					
-		else 	
-			ruta_listada_del_argumento=$(filter 0 0 all| grep --color=never -w "^[ ]*[ ]${lista_argumento}")	
-			
-			if [[ -n ${ruta_listada_del_argumento} ]];then	
-				Acierto_Error "Acierto" "Ruta Numero [ ${lista_argumento} ]\n"
-				echo ${ruta_listada_del_argumento}
-			else 
-				Acierto_Error "Error" "No exite una ruta con el ID: [ ${lista_argumento} ]...!"
-				return 1
-			fi
- 	
+		else 
+			 
+			for conteo in ${!array_argumentos[@]} 
+			do 
+				ruta_listada_del_argumento=$(filter ${array_argumentos[${conteo}]} @)
+
+				if [[ -z ${ruta_listada_del_argumento} ]];then	
+					Acierto_Error "Error" "No exite una ruta con el ID: [ ${array_argumentos[${conteo}]} ]...!"
+				else 
+					[[ -z ${ya_ejecutado} ]] && Acierto_Error "Acierto" "Ruta ID [ ${array_argumentos[@]} ]" &&echo &&ya_ejecutado=true
+					echo ${ruta_listada_del_argumento}
+				fi		
+			done
+			unset ya_ejecutado
 		fi
 	}
 
@@ -165,6 +167,7 @@ function pmng {
 	}	
 
 	function moverme {
+
 		local moverme_argumento=$1
 		if [[ -n ${moverme_argumento} ]];then
 		
@@ -227,15 +230,41 @@ function pmng {
 
 	}
 
+	if [[ $1 == [-] ]];then	
+
+		Acierto_Error "Error" "Parametro no valido [ $1 ]"
+		help	
+	elif [[ -z $1 ]];then	
+		Acierto_Error "Error" "Agrege un parametro"
+		help	
+	elif ! [[ $1 =~ ^[-] ]];then
+	Acierto_Error "Error" "Parametro no valido [ $1 ]"
+		help	
+	fi
+
 
 	OPTIND=1
 	while getopts ":r:m:hsl" options
 	do
 		case ${options} in
 			l)
-			OPTARG=$2
-			lista ${OPTARG}	
-			env_cache
+			shift
+			while [[ true ]];do	
+				if [[ $1 != "" ]];then							
+					argumentos+="$1\n"
+					shift
+				else 
+					break
+				fi 			
+			done
+
+			if [[ -n ${argumentos} ]];then
+				argumentos=${argumentos%%\\n} # ==   sed "/^[ ]*$/d"
+				readarray -t array_argumentos <<< $(echo -e "${argumentos}"| sort -n|uniq)
+			fi 
+			lista
+			unset argumentos array_argumentos
+			env_cache				
 			;;
 			s)
 			OPTARG=$2 
@@ -264,16 +293,5 @@ function pmng {
 
 	done 
 
-	if [[ $1 == [-] ]];then	
-
-		Acierto_Error "Error" "Parametro no valido [ $1 ]"
-		help	
-	elif [[ -z $1 ]];then	
-		Acierto_Error "Error" "Agrege un parametro"
-		help	
-	elif ! [[ $1 =~ ^[-] ]];then
-		Acierto_Error "Error" "Parametro no valido [ $1 ]"
-		help	
-	fi	
 	debug off
 }
