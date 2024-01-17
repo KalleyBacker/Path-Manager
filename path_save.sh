@@ -82,7 +82,7 @@ function pmng {
 		echo -e "\nUsage: Path_save [OPTIONS]... [ID/Path]...\n"
 		echo -e "Guarda las rutas mas concurridas.\n"
 		echo -e "Options:\n"
-		echo -e "	-l,	Lista todas las rutas guardadas, argumento(opcional): [ID].\n" 
+		echo -e "	-l,	Lista todas las rutas guardadas, argumento(opcional): [ID/s].\n" 
 		echo -e "	-s,	Guarda la ruta donde actualmente estas situado, argumento(opcional): [Path].\n"
 		echo -e "	-m,	Moverse atravez de las ruta seleccionada, argumento: [ID]\n"
 		echo -e "	-r,	Remueve/Elimina la ruta de la cache, argumento: [ID].\n" 
@@ -106,11 +106,11 @@ function pmng {
 				if [[ -z ${ruta_listada_del_argumento} ]];then	
 					Acierto_Error "Error" "No exite una ruta con el ID: [ ${array_argumentos[${conteo}]} ]...!"
 				else 
-					[[ -z ${ya_ejecutado} ]] && Acierto_Error "Acierto" "Ruta ID [ ${array_argumentos[@]} ]" &&echo &&ya_ejecutado=true
+					[[ -z ${ya_ejecutado} ]] && Acierto_Error "Acierto" "Ruta/s ID/s [ ${array_argumentos[@]} ]" &&echo &&ya_ejecutado=true
 					echo ${ruta_listada_del_argumento}
 				fi		
 			done
-			unset ya_ejecutado
+			unset ya_ejecutado 
 		fi
 	}
 
@@ -169,6 +169,7 @@ function pmng {
 	function moverme {
 
 		local moverme_argumento=$1
+
 		if [[ -n ${moverme_argumento} ]];then
 		
 			ruta_moverme="$(filter ${moverme_argumento} 2)"			
@@ -196,17 +197,33 @@ function pmng {
 
 	function remover {
 
-		local remover_argumento=$1
-		numero_lineas_existe="$(filter ${remover_argumento} 1)"
+						
+		if [[ -n ${array_argumentos[@]} ]];then
 
-		if [[ -n ${numero_lineas_existe} ]];then
-			
-			ruta_existe="$(filter ${remover_argumento} 2)"
-			if [[ -n ${ruta_existe}	]];then	
+			for conteo in ${!array_argumentos[@]} 
+			do 	
+				numero_linea_existe="$(filter ${array_argumentos[${conteo}]} 1)"
+				if [[ -n ${numero_linea_existe} ]];then
+
+					ruta_existe="$(filter ${array_argumentos[${conteo}]} 2)"
+					if [[ -n ${ruta_existe}	]];then		
+							
+						[ -z ${ya_ejecutado} ] && Acierto_Error "Acierto" "Comando Exictoso\nID de Ruta/s: [ ${array_argumentos[@]} ] Borrada..." && ya_ejecutado=true
+						sed -i "${array_argumentos[${conteo}]}s/.*/ /" ${ruta}
+					else 	
+						Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ ${array_argumentos[${conteo}]} ]...!"		
+					fi 	
+				else 
+					Acierto_Error "Error" "No exite una ruta con el ID: [ ${array_argumentos[${conteo}]} ]...!"
+				fi								 		
+			done
+			unset ya_ejecutado
+		else 
+			Acierto_Error "Error" "Agrege un parametro"
+		fi	
 				
-				sed -i "${remover_argumento}s/.*/ /" ${ruta} && Acierto_Error "Acierto" "Comando Exictoso\nRuta: [ ${remover_argumento} ] Borrada..."
 
-				#limpieza de id no utilizados
+	## Limpieza de id no utilizados ##
 				total_numero_lineas=$(cat -n ${ruta}|wc -l)
 				total1=${total_numero_lineas}
 				
@@ -218,16 +235,8 @@ function pmng {
        					break
     				fi				
     			   ((total1--)) 
-				done
-			else 	
-				Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ ${remover_argumento} ]...!"
-				return 1
-			fi 	 
-		else 
-			Acierto_Error "Error" "No exite una ruta con el ID: [ ${remover_argumento} ]...!"
-			return 1
-		fi
-
+				done		
+	
 	}
 
 	if [[ $1 == [-] ]];then	
@@ -272,7 +281,22 @@ function pmng {
 			env_cache
 			;;		
 			r)
-			remover ${OPTARG}
+			shift
+			while [[ true ]];do	
+				if [[ $1 != "" ]];then							
+					argumentos+="$1\n"
+					shift
+				else 
+					break
+				fi 			
+			done
+
+			if [[ -n ${argumentos} ]];then
+				argumentos=${argumentos%%\\n} # ==   sed "/^[ ]*$/d"
+				readarray -t array_argumentos <<< $(echo -e "${argumentos}"| sort -n|uniq)
+			fi 
+			remover
+			unset argumentos array_argumentos
 			env_cache
 			;;
 			m)
