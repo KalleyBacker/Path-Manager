@@ -5,8 +5,13 @@
 
 ##BUGS y updates  
 # 	
+#	reorganizar id no utilzados 
+#
+#	funcion moverme ./fs/cgroup/user.sl no puede aceptar ruta que no comiencen en la / 
+#
+#   las ruta son distintas solo si tienen un / al final ejemplo hola/ y hola son diferentes 	
 #	
-#	
+#	Agrupacion de rutas
 ##################################################################################################
 
 
@@ -79,13 +84,13 @@ function pmng {
 
 	function help {
 		
-		echo -e "\nUsage: Path_save [OPTIONS]... [ID/Path]...\n"
+		echo -e "\nUsage: Path_save [OPTIONS]... [IDs/Path]...\n"
 		echo -e "Guarda las rutas mas concurridas.\n"
 		echo -e "Options:\n"
 		echo -e "	-l,	Lista todas las rutas guardadas, argumento(opcional): [ID/s].\n" 
 		echo -e "	-s,	Guarda la ruta donde actualmente estas situado, argumento(opcional): [Path].\n"
 		echo -e "	-m,	Moverse atravez de las ruta seleccionada, argumento: [ID]\n"
-		echo -e "	-r,	Remueve/Elimina la ruta de la cache, argumento: [ID].\n" 
+		echo -e "	-r,	Remueve/Elimina la ruta de la cache, argumento: [ID/s].\n" 
 		echo -e "	-h,	Despliega la ayuda.\n"
 	
 	}
@@ -116,14 +121,16 @@ function pmng {
 
 	function save {
 
+
 		local path_por_parametro=$1
 		
 		if [[ -z ${path_por_parametro} ]];then
 			path_por_parametro="$(pwd)"
 		fi	
-		
-		if [[ -d ${path_por_parametro} ]];then
 
+		if [[ -d ${path_por_parametro} ]];then
+			
+			path_por_parametro=$(readlink -f ${path_por_parametro})		
 
 			(grep -qwE "^${path_por_parametro}$" "${ruta}")
 			if [[ $? -eq 0 ]];then
