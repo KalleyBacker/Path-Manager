@@ -205,7 +205,7 @@ function pmng {
 				if [[ -n ${numero_linea_existe} ]];then
 
 					ruta_existe="$(filter ${array_argumentos[${conteo}]} @)"
-					ruta_moverme="$(echo -n ${ruta_existe}|sed "s/.[ ]//")"
+					ruta_moverme="$(echo -n ${ruta_existe}|sed "s/.*[ ]//")"
 					if [[ -n ${ruta_existe}	]];then	
 						Acierto_Error "Acierto" "Ruta: [ ${ruta_moverme} ] Borrada..."
 						sed -i "${array_argumentos[${conteo}]}s/.*/ /" ${ruta}
