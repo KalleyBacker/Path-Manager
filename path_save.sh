@@ -204,23 +204,19 @@ function pmng {
 				numero_linea_existe="$(filter ${array_argumentos[${conteo}]} 1)"
 				if [[ -n ${numero_linea_existe} ]];then
 
-					ruta_existe="$(filter ${array_argumentos[${conteo}]} @)"
-					ruta_moverme="$(echo -n ${ruta_existe}|sed "s/.*[ ]//")"
+					ruta_existe="$(filter ${array_argumentos[${conteo}]} 2)"
+	
 					if [[ -n ${ruta_existe}	]];then	
-						Acierto_Error "Acierto" "Ruta: [ ${ruta_moverme} ] Borrada..."
+						Acierto_Error "Acierto" "Ruta: [ ${numero_linea_existe} ] Borrada..."
 						sed -i "${array_argumentos[${conteo}]}s/.*/ /" ${ruta}
 					else
-						Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ ${ruta_moverme} ]...!"		
+						Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ ${numero_linea_existe} ]...!"		
 					fi
 				else 
 					Acierto_Error "Error" "No exite una ruta con el ID: [ $(echo -n ${array_argumentos[${conteo}]}) ]...!"
 				fi							 		
 			done
-			#Acierto_Error "Acierto" "Total: [ $((${conteo}+1)) ] rutas Borradas..."
-		else
-			Acierto_Error "Error" "Agrege un parametro"
 		fi
-
 
 	## Limpieza de los ulimos id no utilizados ##
 				total_numero_lineas=$(cat -n ${ruta}|wc -l)
