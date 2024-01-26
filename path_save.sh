@@ -175,7 +175,7 @@ function pmng {
 		local moverme_argumento=$1
 		
 		ruta_moverme="$(filter ${moverme_argumento} @)"
-		ruta_moverme="$(echo -n ${ruta_moverme}|sed "s/.[ ]//")"
+		ruta_moverme="$(echo -n ${ruta_moverme}|sed "s/.*[ ]//")"
 
 		if [[ -n "${ruta_moverme}" ]];then
 
