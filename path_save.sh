@@ -116,10 +116,8 @@ function pmng {
 
 	function save {
 
-
 		local path_por_parametro=${@//[ ]/\\ }
 
-		
 		if [[ -z ${path_por_parametro} ]];then
 			path_por_parametro="$(pwd)"
 		fi
@@ -128,40 +126,44 @@ function pmng {
 
 			path_por_parametro=$(readlink -f "${path_por_parametro}")
 
-			(grep -qwE "^${path_por_parametro}$" "${ruta}")
-			if [[ $? -eq 0 ]];then
- 				Acierto_Error "Error" "Esta ruta [ ${path_por_parametro} ] esta guardada!"
- 				return 1
-			else
-				rutas_disponibles=$(echo -n $(filter 0 0 all | grep "[0-99].[[:space:]]$"))
+			if [[ -x ${path_por_parametro} ]];then
 
-				if [[ -n ${rutas_disponibles} ]];then
-					read -p 'Quiere enlazar esta ruta con un ID existente❓[Ss o Nn]: ' SoN
+				(grep -qwE "^${path_por_parametro}$" "${ruta}")
+				if [[ $? -eq 0 ]];then
+ 					Acierto_Error "Error" "Esta ruta [ ${path_por_parametro} ] esta guardada!"
+ 					return 1
+				else
+					rutas_disponibles=$(echo -n $(filter 0 0 all | grep "[0-99].[[:space:]]$"))
+
+					if [[ -n ${rutas_disponibles} ]];then
+						read -p 'Quiere enlazar esta ruta con un ID existente❓[Ss o Nn]: ' SoN
 				
-					if [[ ${SoN} = [Ss] ]];then
+						if [[ ${SoN} = [Ss] ]];then
 
-						read -p "Cual ID de los disponibles quiere utilzar❓ [ ${rutas_disponibles} ]: " Numero_de_ruta_disponible
+							read -p "Cual ID de los disponibles quiere utilzar❓ [ ${rutas_disponibles} ]: " Numero_de_ruta_disponible
 					
-						if $(echo $rutas_disponibles| grep -q ${Numero_de_ruta_disponible});then
+							if $(echo $rutas_disponibles| grep -q ${Numero_de_ruta_disponible});then
 						
-							awk -v rutapwd="${path_por_parametro}" -v numero=${Numero_de_ruta_disponible} 'NR==numero { $0 = rutapwd } 1' ${ruta} > ${temporal}
-							mv ${temporal} ${ruta}
-							Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ ${path_por_parametro} ]" 
-						else
-							Acierto_Error "Error" "El ID [${Numero_de_ruta_disponible}] esta ocupado"
-							return 1
-							break	
+								awk -v rutapwd="${path_por_parametro}" -v numero=${Numero_de_ruta_disponible} 'NR==numero { $0 = rutapwd } 1' ${ruta} > ${temporal}
+								mv ${temporal} ${ruta}
+								Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ ${path_por_parametro} ]" 
+							else
+								Acierto_Error "Error" "El ID [${Numero_de_ruta_disponible}] esta ocupado"
+								return 1
+								break	
+							fi
+						else 
+							echo "${path_por_parametro}" >> ${ruta}
+							Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ ${path_por_parametro} ] ID asociado: [ $(filter 0 0 all|tail -n1 |awk '{print $1}') ]"
 						fi
-					else 
-						echo "${path_por_parametro}" >> ${ruta}
+					else
+						echo "${path_por_parametro}" >> ${ruta}	
 						Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ ${path_por_parametro} ] ID asociado: [ $(filter 0 0 all|tail -n1 |awk '{print $1}') ]"
 					fi
-				else
-					echo "${path_por_parametro}" >> ${ruta}	
-					Acierto_Error "Acierto" "Comando Exitoso\nNueva ruta guardada:[ ${path_por_parametro} ] ID asociado: [ $(filter 0 0 all|tail -n1 |awk '{print $1}') ]"
 				fi
+			else
+				Acierto_Error "Error" "No tienes permisos para ingresar al directorio. [ ${path_por_parametro} ]"
 			fi
-		
 		else
 			Acierto_Error "Error" "Ruta no existe [ ${path_por_parametro} ]"	
 		fi
@@ -194,8 +196,7 @@ function pmng {
 	}
 
 	function remover {
-
-						
+	
 		if [[ -n ${array_argumentos[@]} ]];then
 
 			for conteo in ${!array_argumentos[@]} 
@@ -219,7 +220,7 @@ function pmng {
 		else
 			Acierto_Error "Error" "Agrege un parametro"
 		fi
-				
+
 
 	## Limpieza de los ulimos id no utilizados ##
 				total_numero_lineas=$(cat -n ${ruta}|wc -l)
