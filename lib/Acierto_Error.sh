@@ -1,16 +1,15 @@
-#!/usr/bin/env bash
 
-#----------------------------SOCIAL NETWORKS-----------------------------
+#----------------------------SOCIAL NETWORKS---------------------------﹁
 #                                                                       |
 #   https://github.com/KalleyBacker                                     |
 #   https://www.instagram.com/linux_debugging/                          |
 #   https://www.linkedin.com/in/juan-carlos-morla-reyes-6410a91b3/      |
 #                                                                       |
-#-----------------------------DOCUMENTACION------------------------------
+#-----------------------------DOCUMENTACION-----------------------------⸡
 #                                                                       |
 #  Función encargada de colorear los mensajes que pmng envía al output  |
 #                                                                       |
-#-----------------------------FUNCIONAMIENTO-----------------------------
+#-----------------------------FUNCIONAMIENTO----------------------------⸡
 #                                                                       |
 #       Para enviar mensajes de error                                   | 
 #       Acierto_error "Error" "mensaje...[variable a destacar]..."      |
@@ -18,7 +17,7 @@
 #       Para enviar mensajes de Aciertos                                |
 #       Acierto_error "Acierto" "mensaje...[variable a destacar]..."    |
 #                                                                       |
-#------------------------------------------------------------------------
+#-----------------------------------------------------------------------｣
 
 function Acierto_Error {
   

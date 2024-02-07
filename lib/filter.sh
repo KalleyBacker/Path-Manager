@@ -1,12 +1,12 @@
 
 
-#--------------------------------SOCIAL NETWORKS---------------------------------
+#--------------------------------SOCIAL NETWORKS-------------------------------﹁
 #                                                                               |
 #   https://github.com/KalleyBacker                                             |
 #   https://www.instagram.com/linux_debugging/                                  |
 #   https://www.linkedin.com/in/juan-carlos-morla-reyes-6410a91b3/              |
 #                                                                               |
-#---------------------------------DOCUMENTACION----------------------------------
+#---------------------------------DOCUMENTACION---------------------------------⸡
 #                                                                               |
 #    La función filter en Bash toma tres parámetros:                            | 
 #    fila, columna, y total. Si total es "all",                                 |
@@ -17,13 +17,13 @@
 #    Utiliza awk para lograr esto, extrayendo el valor de la                    |   
 #    columna indicada en la fila especificada.                                  |
 #                                                                               |
-#--------------------------------FUNCIONAMIENTO----------------------------------
+#--------------------------------FUNCIONAMIENTO---------------------------------⸡
 #                                                                               |
 #    filter 1 2     - Para imprimir el valor de la columna 2 en la fila 1       |
 #    filter 1 @     - Para imprimir el valor de la columna 1 y 2 en la fila 1   |
 #    filter 0 0 all - Para imprimir todas las filas numeradas del archivo       |
 #                                                                               |
-#--------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------｣
 
 
 
