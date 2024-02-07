@@ -1,3 +1,16 @@
+#----------------------------SOCIAL NETWORKS-----------------------------
+#                                                                       |
+#   https://github.com/KalleyBacker                                     |
+#   https://www.instagram.com/linux_debugging/                          |
+#   https://www.linkedin.com/in/juan-carlos-morla-reyes-6410a91b3/      |
+#                                                                       |
+#-----------------------------DOCUMENTACION------------------------------
+#                                                                       |
+# 						 Muestra la ayuda[help]                         |
+#                                                                       |
+#------------------------------------------------------------------------
+
+
 function help {
 		
 	echo -e "\nUsage: Path_save [OPTIONS]... [IDs/Path]...\n"

@@ -1,3 +1,17 @@
+#----------------------------SOCIAL NETWORKS-----------------------------
+#                                                                       |
+#   https://github.com/KalleyBacker                                     |
+#   https://www.instagram.com/linux_debugging/                          |
+#   https://www.linkedin.com/in/juan-carlos-morla-reyes-6410a91b3/      |
+#                                                                       |
+#-----------------------------DOCUMENTACION------------------------------
+#                                                                       |
+#             Función encargada de almacenar las variables              |
+#                     con los formatos de colores.                      |
+#                                                                       |
+#------------------------------------------------------------------------
+
+
 function color {
 
 	verd="\033[32m"

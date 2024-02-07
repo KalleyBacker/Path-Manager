@@ -1,3 +1,16 @@
+#----------------------------SOCIAL NETWORKS-----------------------------
+#                                                                       |
+#   https://github.com/KalleyBacker                                     |
+#   https://www.instagram.com/linux_debugging/                          |
+#   https://www.linkedin.com/in/juan-carlos-morla-reyes-6410a91b3/      |
+#                                                                       |
+#-----------------------------DOCUMENTACION------------------------------
+#                                                                       |
+# 		        Crear el archivo que almacena las rutas	            	|
+#                                                                       |
+#------------------------------------------------------------------------
+
+
 function env_cache { 
 	
 	if ! [[ -f ${ruta} ]];then
