@@ -36,26 +36,31 @@ Este proyecto fue creado con el propósito de facilitar la movilidad en rutas mu
 
 ## Instalacion en bash
 
-1. Clona el repositorio
+1. Muevete al home y clona el repositorio
 
 ```bash
-git clone https://github.com/KalleyBacker/Path-Manager.git
+cd ${HOME} && git clone https://github.com/KalleyBacker/Path-Manager.git
 ```
-
 
 2. Crea el directorio .functions.d
 
 ```bash
-mkdir ~/.functions.d"
+mkdir ${HOME}/.functions.d"
 ```
 3. Copia el script en el directorio .functions.d
 ```bash
-cp ~/Path-Manager/path_save.sh "$HOME/.functions.d/"
+cp -r ${HOME}/Path-Manager/* "${HOME}/.functions.d/"
 ```
 4. Configura la carga automática en tu archivo ~/.bashrc
 
 ```bash
-echo -e '#source_script\nfor script in "${HOME}/.functions.d/*"\ndo\n\tsource "$script"\ndone' >> ~/.bashrc
+echo -e '\n#source_script
+####################################################################
+for script in $(find ${HOME}/.functions.d -type f -name "*.sh" )   #
+do                                                                 #
+        source $script                                             #
+done                                                               #
+####################################################################\n' >> ~/.bashrc
 ```
 
 5. Carga la configuracion del bashrc
@@ -72,7 +77,9 @@ source ~/.bashrc
 pmng -s
 ```
 
-<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/dfbd7dd1-2a6b-4af2-a060-94cbd4b8654b" alt="Logo" width="1010" height="200">
+
+
+<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/cf8c56c4-e49f-40c3-912e-9ef011ac6445" alt="Logo" width="1010" height="200">
 
 <br/>
 <br/>
@@ -85,7 +92,8 @@ pmng -s
 pmng -l
 ```
 
-<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/ef4f2721-edac-49fe-967e-32f737a2d747" alt="Logo" width="1020" height="400">
+
+<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/ff6207b8-3f22-48bd-b761-86b0738f7c37" alt="Logo" width="1020" height="400">
 
 <br/>
 <br/>
@@ -95,10 +103,11 @@ pmng -l
 3. Moverse a través de una ruta específica:
 
 ```bash
-pmng -m 1
+pmng -m {ID DE LA RUTA}
 ```
 
-<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/f8400601-dfa1-4e9c-a92f-5c7b7bfee8ec" alt="Logo" width="1010" height="200">
+
+<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/72be3b6b-3c15-4809-999c-508f55094c51" alt="Logo" width="1010" height="200">
 
 <br/>
 <br/>
@@ -108,10 +117,11 @@ pmng -m 1
 4. Eliminar una ruta de la cache:
 
 ```bash
-pmng -r 2
+pmng -r {ID DE LA RUTA}
 ```
 
-<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/54332974-a5c8-49b8-b1b9-8c711e0d5fb5" alt="Logo" width="700" height="200">
+
+<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/a2dee2f6-f053-4de0-91a2-35ec32b4242c" alt="Logo" width="700" height="200">
 
 <br/>
 <br/>
@@ -124,7 +134,7 @@ pmng -r 2
 pmng -h
 ```
 
-<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/35352eae-2a3d-4d0e-8765-12f4659292d0" alt="Logo" width="1010" height="500">
+<img src="https://github.com/KalleyBacker/Path-Manager/assets/84671791/40b38e2f-7016-45a0-bd3f-93a15382c79e" alt="Logo" width="1010" height="500">
 <br/>
 
 ## Autor
