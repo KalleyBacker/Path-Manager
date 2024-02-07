@@ -45,7 +45,7 @@ cd ${HOME} && git clone https://github.com/KalleyBacker/Path-Manager.git
 2. Crea el directorio .functions.d
 
 ```bash
-mkdir ${HOME}/.functions.d"
+mkdir ${HOME}/.functions.d
 ```
 3. Copia el script en el directorio .functions.d
 ```bash
