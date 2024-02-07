@@ -2,94 +2,13 @@
 
 #Author: [ KalleyBacker ]
 
-
-##BUGS y updates  
-# 	
-#	reorganizar id no utilzados 
-#
-##################################################################################################
-
-
-
-function debug {
-	set +x
-	local interruptor=$1
-	
-	if [[ ${interruptor} = off ]];then
-		set +x
-	elif [[ ${interruptor} = on ]];then
-		set -x
-	fi
-}
-
-function filter { 
-    
-    local fila=$1
-    local columna=$2
-    local total=$3
-   
-    if [[ ${total} == all ]];then
-    	cat -n ${ruta}	
-    else
-    	cat -n ${ruta} | awk -v c=${columna} -v f=${fila} 'NR==f {print $c}'
-    fi
-}
-
-function Acierto_Error {
-  
-   	local pregunta=$1
-   	local parametro=$2
-    
-    if [[ ${pregunta} = Error ]];then
-    	local signo='❌' && local color=${red}
-    elif [[ ${pregunta} = Acierto ]]; then
-    	local signo='✅'&& local color=${verd}
-    fi
-
-    echo -e "${white}[${null}${signo}${white}] ${pregunta} - ${null}$(echo -n "$2" |\
-        sed -e "s/\[/\\${null}\\${white}&/g" \
-            -e "s/]/&\\${null}/g" \
-            -e "s/\\033\[0m/&\\${color}/g" \
-            -e "s/^\[/\\${white}&/" \
-            -e "s/^[^[]/\\${color}&/" \
-            -e "s/[^[]$/&\\${null}/")"
-}
-
 function pmng {
 
 	debug off
-	
-   	local verd="\033[32m"
-	local red="\033[31m"
-	local null="\033[0m"
-	local amarillo="\033[33m"
-	local white="\033[37m"
 	local ruta="${HOME}/.Path_save_cache.cache"
-	local temporal="${HOME}/.Path_save_cache.cache1"
+    local temporal="${HOME}/.Path_save_cache.cache1"
+	color
 	
-
-	function env_cache { 
-	
-		if ! [[ -f ${ruta} ]];then
-			echo -e "\nMe estas usando por primera vez😉!\n\nVoy a crear un fichero oculto en [ ${ruta} ]\nEsto con finalidad de manejar la cache.\nYa puedes empezar a guardar tus rutas."
-			touch ${ruta} && chmod 640 ${ruta}
-		fi
-	}
-
-
-	function help {
-		
-		echo -e "\nUsage: Path_save [OPTIONS]... [IDs/Path]...\n"
-		echo -e "Guarda las rutas mas concurridas.\n"
-		echo -e "Options:\n"
-		echo -e "	-l,	Lista todas las rutas guardadas, argumento(opcional): [ID/s].\n" 
-		echo -e "	-s,	Guarda la ruta donde actualmente estas situado, argumento(opcional): [Path].\n"
-		echo -e "	-m,	Moverse atravez de las ruta seleccionada, argumento: [ID]\n"
-		echo -e "	-r,	Remueve/Elimina la ruta de la cache, argumento: [ID/s].\n" 
-		echo -e "	-h,	Despliega la ayuda.\n"
-	
-	}
-
 	function lista {
 		
 		if ! [[ -s ${ruta} ]];then
@@ -194,7 +113,7 @@ function pmng {
 			Acierto_Error "Error" "El ID: [ ${moverme_argumento} ] no tiene una ruta asignada..."
 		fi
 	}
-
+	
 	function remover {
 	
 		if [[ -n ${array_argumentos[@]} ]];then
@@ -207,30 +126,30 @@ function pmng {
 					ruta_existe="$(filter ${array_argumentos[${conteo}]} 2)"
 	
 					if [[ -n ${ruta_existe}	]];then	
-						Acierto_Error "Acierto" "Ruta: [ ${numero_linea_existe} ] Borrada..."
+						Acierto_Error "Acierto" "Ruta: [ ${ruta_existe} ] Borrada..."
 						sed -i "${array_argumentos[${conteo}]}s/.*/ /" ${ruta}
 					else
-						Acierto_Error "Error" "No existe ninguna ruta asociada al ID: [ ${numero_linea_existe} ]...!"		
+						Acierto_Error "Error" "El ID: [ ${numero_linea_existe} ] no tiene una ruta asociada!"		
 					fi
 				else 
-					Acierto_Error "Error" "No exite una ruta con el ID: [ $(echo -n ${array_argumentos[${conteo}]}) ]...!"
+					Acierto_Error "Error" "El ID: [ $(echo -n ${array_argumentos[${conteo}]}) ] no existe!"
 				fi							 		
 			done
 		fi
 
-	## Limpieza de los ulimos id no utilizados ##
-				total_numero_lineas=$(cat -n ${ruta}|wc -l)
-				total1=${total_numero_lineas}
+	# Limpieza de los ulimos id no utilizados #
+		total_numero_lineas=$(cat -n ${ruta}|wc -l)
+		total1=${total_numero_lineas}
 				
-				for (( i = 1; i <= ${total_numero_lineas}; i++ )); do
-					no_existe=$(filter ${total1} 2)
-					if 	[[ -z $no_existe ]];then	
-     					sed -i "${total1}d" ${ruta}
-   				    else
-       					break
-    				fi				
-    			   ((total1--)) 
-				done		
+		for (( i = 1; i <= ${total_numero_lineas}; i++ )); do
+			no_existe=$(filter ${total1} 2)
+			if 	[[ -z $no_existe ]];then	
+    			sed -i "${total1}d" ${ruta}
+   		    else
+       			break
+    		fi				
+    		   ((total1--)) 
+		done		
 	
 	}
 
@@ -245,7 +164,6 @@ function pmng {
 	Acierto_Error "Error" "Parametro no valido [ $1 ]"
 		help	
 	fi
-
 
 	OPTIND=1
 	while getopts ":r:m:hsl" options
@@ -309,7 +227,6 @@ function pmng {
             return 1
             ;;
 		esac
-
 	done
 
 	debug off
