@@ -1,4 +1,4 @@
-#----------------------------SOCIAL NETWORKS---------------------------﹁
+#----------------------------SOCIAL-NETWORKS---------------------------﹁
 #                                                                       |
 #   https://github.com/KalleyBacker                                     |
 #   https://www.instagram.com/linux_debugging/                          |

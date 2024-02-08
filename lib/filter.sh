@@ -1,5 +1,3 @@
-
-
 #--------------------------------SOCIAL NETWORKS-------------------------------﹁
 #                                                                               |
 #   https://github.com/KalleyBacker                                             |
@@ -8,7 +6,8 @@
 #                                                                               |
 #---------------------------------DOCUMENTACION---------------------------------⸡
 #                                                                               |
-#    La función filter en Bash toma tres parámetros:                            | 
+#    Este script Bash define una                                                |
+#    función llamada filter en Bash toma tres parámetros:                       | 
 #    fila, columna, y total. Si total es "all",                                 |
 #    muestra todas las filas numeradas del archivo                              | 
 #    en la ruta especificada. Si no, filtra la fila                             |  
