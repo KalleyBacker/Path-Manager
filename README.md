@@ -49,7 +49,7 @@ mkdir ${HOME}/.functions.d
 ```
 3. Copia el script en el directorio .functions.d
 ```bash
-cp -r ${HOME}/Path-Manager/*.sh "${HOME}/.functions.d/"
+find ${HOME}/Path-Manager/ -type f -name "*.sh" -exec cp {} ${HOME}/.functions.d \;"
 ```
 4. Configura la carga automática en tu archivo ~/.bashrc
 
